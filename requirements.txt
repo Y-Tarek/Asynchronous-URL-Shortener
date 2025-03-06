@@ -1,0 +1,12 @@
+Django>=4.2
+djangorestframework
+django-async-orm
+django-ratelimit
+psycopg2-binary
+celery
+gunicorn
+redis
+django-redis
+uvicorn
+python-decouple 
+psycopg2
