@@ -18,10 +18,10 @@ class ShortenURLAPI(View):
     serializer_class = ShortenURlSerializer
 
     async def post(self, request):
-        was_limited = is_rate_limited(request,"POST")
+        was_limited = is_rate_limited(request,"POST",'shorten_url')
         if was_limited:
             return JsonResponse(
-                {"detail": "Too many login attempts. Please try again later."},
+                {"detail": "Too many attempts. Please try again later."},
                 status=status.HTTP_429_TOO_MANY_REQUESTS,
             )
         data = json.loads(request.body.decode("utf-8"))
@@ -43,10 +43,10 @@ class ReturnOriginalURLAPI(View):
     """Retrieve Base URL from shorten one"""
 
     async def get(self, request, shortened_url):
-        was_limited = is_rate_limited(request,"GET")
+        was_limited = is_rate_limited(request,"GET",'original_url')
         if was_limited:
             return JsonResponse(
-                {"detail": "Too many login attempts. Please try again later."},
+                {"detail": "Too many attempts. Please try again later."},
                 status=status.HTTP_429_TOO_MANY_REQUESTS,
             )
         cached_url = cache.get(shortened_url)
@@ -62,17 +62,17 @@ class ReturnOriginalURLAPI(View):
         cache.set(shortened_url, obj.original_url, timeout=60 * 60)
         update_clicks.delay(shortened_url)
 
-        return JsonResponse(obj.original_url)
+        return JsonResponse({"URL":obj.original_url})
 
 
 class ReturnStatsAPI(View):
     """Retrieve statstics for the URL"""
 
     async def get(self, request, shortened_url):
-        was_limited = is_rate_limited(request,"GET")
+        was_limited = is_rate_limited(request,"GET",'url-stats')
         if was_limited:
             return JsonResponse(
-                {"detail": "Too many login attempts. Please try again later."},
+                {"detail": "Too many attempts. Please try again later."},
                 status=status.HTTP_429_TOO_MANY_REQUESTS,
             )
         obj = await ShortenedURL.objects.filter(shortened_code=shortened_url).afirst()

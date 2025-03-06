@@ -9,8 +9,6 @@ services:
       POSTGRES_DB: url_shortener_db
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
-    ports:
-      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -18,8 +16,6 @@ services:
     image: redis:7
     container_name: redis_cache
     restart: always
-    ports:
-      - "6379:6379"
 
   web:
     build: .
@@ -34,6 +30,7 @@ services:
       SQL_USER: admin
       SQL_PASSWORD: admin123
       SQL_PORT: 5432
+      SQL_HOST: db
       DEBUG: "True"
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -56,6 +53,7 @@ services:
       SQL_USER: admin
       SQL_PASSWORD: admin123
       SQL_PORT: 5432
+      SQL_HOST: db
       DEBUG: "True"
       REDIS_HOST: redis
       REDIS_PORT: 6379

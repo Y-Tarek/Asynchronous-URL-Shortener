@@ -11,7 +11,7 @@ def update_clicks(shortened_url):
     )
 
 
-def is_rate_limited(request,method):
+def is_rate_limited(request,method,group):
     """Check if the request exceeds the rate limit."""
     return is_ratelimited(
         request,
@@ -19,5 +19,5 @@ def is_rate_limited(request,method):
         rate="3/5m",
         method=method,
         increment=True,
-        group="national id info",
+        group=group,
     )
