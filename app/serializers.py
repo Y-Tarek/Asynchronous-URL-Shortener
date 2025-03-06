@@ -1,7 +1,11 @@
 from rest_framework import serializers
+from .models import ShortenedURL
 
 
-class ShortenURlSerializer(serializers.Serializer):
+class ShortenURlSerializer(serializers.ModelSerializer):
     """Serializer for storing urls and shorten them"""
-
-    url = serializers.URLField()
+    
+    original_url = serializers.URLField()
+    class Meta:
+         model = ShortenedURL
+         fields = ['original_url']

@@ -25,8 +25,14 @@ class ShortenURLAPI(View):
                 status=status.HTTP_429_TOO_MANY_REQUESTS,
             )
         data = json.loads(request.body.decode("utf-8"))
-        original_url = data.get("url")
 
+        serializer = self.serializer_class(data=data)
+        if not serializer.is_valid():
+            return JsonResponse(serializer.errors, status=400)
+        
+        original_url = data.get("original_url")
+
+             
         cached_shortened = cache.get(original_url)
         if cached_shortened:
             return JsonResponse({"shortened_url": cached_shortened})
